@@ -1,4 +1,4 @@
-package bchapi
+package api
 
 const (
 	BLOCK_URL    = "block/%d/"
