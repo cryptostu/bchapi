@@ -21,3 +21,14 @@ func GetBlockTxs(height int) (error, []*model.Tx) {
 	return err, txs
 
 }
+
+func GetBlock(height int) (error, []*model.Block) {
+	url := fmt.Sprintf(BLOCK_URL, height)
+	result, err := bchapi.HttpGet(url)
+	if err != nil {
+		fmt.Println(err)
+	}
+	block, err := model.StringToBlock(result)
+	return err, block
+
+}
