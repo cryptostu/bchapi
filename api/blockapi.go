@@ -4,31 +4,30 @@ import (
 	"fmt"
 	"github.com/cryptostu/bchapi"
 	"github.com/cryptostu/bchapi/model"
+
 )
 
-const (
-	BLOCK_URL    = "block/%d/"
-	BLOCK_TX_URL = "block/%d/tx"
-)
 
-func GetBlockTxs(height int) (error, []*model.Tx) {
-	url := fmt.Sprintf(BLOCK_TX_URL, height)
+
+func GetBlockTxs(height int) ([]*model.Tx, error) {
+	url := fmt.Sprintf(bchapi.BlockTxsUrl, height)
 	result, err := bchapi.HttpGet(url)
 	if err != nil {
 		fmt.Println(err)
 	}
 	txs, err := model.StringToTxs(result)
-	return err, txs
+	return txs, err
 
 }
 
-func GetBlock(height int) (error, []*model.Block) {
-	url := fmt.Sprintf(BLOCK_URL, height)
+func GetBlock(height int) (*model.Block, error) {
+	url := fmt.Sprintf(bchapi.BlockUrl, height)
 	result, err := bchapi.HttpGet(url)
 	if err != nil {
 		fmt.Println(err)
+		return nil, err
 	}
 	block, err := model.StringToBlock(result)
-	return err, block
+	return block, err
 
 }

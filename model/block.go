@@ -1,5 +1,10 @@
 package model
 
+import (
+	"encoding/json"
+	"errors"
+)
+
 type Block struct {
 	Height        int
 	Version       int
@@ -26,8 +31,20 @@ type Extras struct {
 	PoolName string `json:"pool_name"`
 	PoolLink string `json:"pool_link"`
 }
+type jsonResult struct {
+	data   Block
+	errNo  int    `json:"err_no"`
+	errMsg string `json:"err_msg"`
+}
 
-func StringToBlock(str string) ([]*Block, error) {
-	return nil, nil
+func StringToBlock(str string) (*Block, error) {
+
+	var data jsonResult
+	json.Unmarshal([]byte(str), &data)
+
+	if data.errNo != 0 {
+		return nil, errors.New(data.errMsg)
+	}
+	return &data.data, nil
 
 }
