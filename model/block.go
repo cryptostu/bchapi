@@ -32,9 +32,9 @@ type Extras struct {
 	PoolLink string `json:"pool_link"`
 }
 type jsonResult struct {
-	data   Block
-	errNo  int    `json:"err_no"`
-	errMsg string `json:"err_msg"`
+	Block  Block  `json:"data"`
+	ErrNo  int    `json:"err_no"`
+	ErrMsg string `json:"err_msg"`
 }
 
 func StringToBlock(str string) (*Block, error) {
@@ -42,9 +42,9 @@ func StringToBlock(str string) (*Block, error) {
 	var data jsonResult
 	json.Unmarshal([]byte(str), &data)
 
-	if data.errNo != 0 {
-		return nil, errors.New(data.errMsg)
+	if data.ErrNo != 0 {
+		return nil, errors.New(data.ErrMsg)
 	}
-	return &data.data, nil
+	return &data.Block, nil
 
 }

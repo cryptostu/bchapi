@@ -14,7 +14,7 @@ func TestGetBlock(t *testing.T) {
 		t.Error(err)
 	}
 	if block.Hash != "0000000082b5015589a3fdf2d4baff403e6f0be035a5d9742c1cae6295464449" {
-		t.Error("blcok hash is error")
+		t.Errorf("blcok hash(%s) is not 0000000082b5015589a3fdf2d4baff403e6f0be035a5d9742c1cae6295464449", block.Hash)
 	}
 
 }
