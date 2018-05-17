@@ -11,11 +11,11 @@ type Address struct {
 	Received            int
 	Sent                int
 	Balance             int
-	TxCount             int
-	UnconfirmedTxCount  int
-	UnconfirmedReceived int
-	UnconfirmedSent     int
-	UnspentTxCount      int
+	TxCount             int `json:"tx_count"`
+	UnconfirmedTxCount  int `json:"unconfirmed_tx_count"`
+	UnconfirmedReceived int `json:"unconfirmed_received"`
+	UnconfirmedSent     int `json:"unconfirmed_sent"`
+	UnspentTxCount      int `json:"unspent_tx_count"`
 }
 
 type multiAddressResult struct {
