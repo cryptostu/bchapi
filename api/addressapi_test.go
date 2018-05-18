@@ -33,3 +33,17 @@ func TestGetMultiAddress(t *testing.T) {
 		}
 	}
 }
+
+func TestGetAddressTx(t *testing.T) {
+	addr := "15urYnyeJe3gwbGJ74wcX89Tz7ZtsFDVew"
+	if result, err := GetAddressTx(addr, 1, 3); err != nil {
+		t.Errorf("GetAddressTx  api failed,err:%s", err.Error())
+	} else {
+		hash := "04ffa9c3875b15ceb65c2dd4ee2654c5fb65374123692362e32fac566a6b16aa"
+		expect := result.Txs[0].Hash
+		if hash != expect {
+			t.Errorf("Expect hash %s but got %s", hash, expect)
+		}
+	}
+
+}
