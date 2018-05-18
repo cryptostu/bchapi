@@ -2,8 +2,10 @@ package api
 
 import (
 	"fmt"
+	"net/url"
 
 	"github.com/cryptostu/bchapi"
+	"github.com/cryptostu/bchapi/model"
 )
 
 //TxDecode decode transaction
@@ -34,12 +36,17 @@ func TxPublish(rawhex string) (str string, err error) {
 //address The bitcoin address to use for the signature
 //message The signed message
 //signature The base-64 encoded signature provided by the signer
-func VerifyMessage(address string, message string, signature string) (str string, err error) {
-	data := fmt.Sprintf("address=%s&message=%s&signature=%s", address, message, signature)
+func VerifyMessage(address string, message string, signature string) (valid bool, err error) {
+	//	data := fmt.Sprintf("address=%s&message=%s&signature=%s", address, message, signature)
+	params := &url.Values{}
+	params.Add("address", address)
+	params.Add("message", message)
+	params.Add("signature", signature)
+	data := params.Encode()
 	result, err := bchapi.HttpPost(bchapi.ToolsVerifyMessageUrl, data, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
 	if err != nil {
 		return
 	}
-	str = result
+	valid, err = model.StringToResult(result)
 	return
 }

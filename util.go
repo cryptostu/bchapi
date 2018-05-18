@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	ConnTimeoutMS  = 1000
-	ServeTimeoutMS = 3000
+	ConnTimeoutMS  = 3000
+	ServeTimeoutMS = 5000
 )
 
 //HttpGet get method
