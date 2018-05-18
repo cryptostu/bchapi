@@ -17,6 +17,16 @@ type Address struct {
 	UnconfirmedSent     int `json:"unconfirmed_sent"`
 	UnspentTxCount      int `json:"unspent_tx_count"`
 }
+
+//Unspent struct define
+type Unspent struct {
+	TxHash        string `json:"tx_hash"`
+	TxOutputN     int    `json:"tx_output_n"`
+	TxOutputN2    int    `json:"tx_output_n2"`
+	Value         int    `json:"value"`
+	Confirmations int    `json:"confirmations"`
+}
+
 type responseCode struct {
 	ErrNo  int    `json:"err_no"`
 	ErrMsg string `json:"err_msg"`
@@ -41,12 +51,22 @@ type addressResult struct {
 //AddressTx address
 type AddressTx struct {
 	paginator
-	Txs []Tx `json:"list"`
+	List []Tx `json:"list"`
 }
 
 type addressTxResult struct {
 	responseCode
 	AddressTx AddressTx `json:"data"`
+}
+
+//AddressUnspent address unspent
+type AddressUnspent struct {
+	paginator
+	List []Unspent `json:"list"`
+}
+type addressUnspentResult struct {
+	responseCode
+	AddressUnspent AddressUnspent `json:"data"`
 }
 
 //StringToAddress json convert to model
@@ -75,7 +95,7 @@ func StringToMultiAddress(str string) (*[]Address, error) {
 
 }
 
-//StringToAddressTx json convert to model
+//StringToAddressTx json convert to AddressTx model
 func StringToAddressTx(str string) (*AddressTx, error) {
 
 	var data addressTxResult
@@ -86,4 +106,15 @@ func StringToAddressTx(str string) (*AddressTx, error) {
 	}
 	return &data.AddressTx, nil
 
+}
+
+//StringToAddressUnspent json convert to AddressUnspent model
+func StringToAddressUnspent(str string) (*AddressUnspent, error) {
+	var data addressUnspentResult
+	json.Unmarshal([]byte(str), &data)
+
+	if data.ErrNo != 0 {
+		return nil, errors.New(data.ErrMsg)
+	}
+	return &data.AddressUnspent, nil
 }
