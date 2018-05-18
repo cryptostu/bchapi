@@ -18,5 +18,16 @@ func TestTxPublish(t *testing.T) {
 }
 
 func TestVerifyMessage(t *testing.T) {
+	address := "17dNxJroBbzyoyoQMTveJwxYpkitAAChtX"
+	message := "0200000001280f134f1cda09b849a44f4b3d038c901e30f6ce0a986768cb10518c9fcb32830000000000ffffffff0180d1f008000000001976a91448b20e254c0677e760bab964aec16818d6b7134a88ac00000000"
+	signature := "ICkfL3WuWIg0PI4ReYYnM1Jq74NxQ7SIc4hFgUf46XRcMUMoIKkzJ8mdJbb+qHR6a1mrowTcFbzuFemU2p3j+bA="
 
+	if result, err := VerifyMessage(address, message, signature); err != nil {
+		t.Errorf("VerifyMessage  api failed,err:%s", err.Error())
+	} else {
+		if !result {
+			t.Error(result)
+		}
+
+	}
 }
