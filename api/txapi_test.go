@@ -14,3 +14,26 @@ func TestGetTx(t *testing.T) {
 		}
 	}
 }
+
+func TestGetTxUnconfirmed(t *testing.T) {
+	if result, err := GetTxUnconfirmed(); err != nil {
+		t.Errorf("GetTx  api failed,err:%s", err.Error())
+	} else {
+		if len(result) >= 0 {
+			hash := result[0]
+			if result, err := GetTx(hash); err != nil {
+				t.Errorf("GetTx  api failed,err:%s", err.Error())
+			} else {
+				if result != nil && hash != result.Hash {
+					t.Errorf("Expect hash %s but got %s", hash, result.Hash)
+				}
+			}
+		}
+	}
+}
+
+func TestGetTxUnconfirmedSummary(t *testing.T) {
+	if _, err := GetTxUnconfirmedSummary(); err != nil {
+		t.Errorf("GetTxUnconfirmedSummary  api failed,err:%s", err.Error())
+	}
+}

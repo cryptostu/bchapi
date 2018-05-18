@@ -84,3 +84,45 @@ func JsonToMap(s string) (map[string]interface{}, error) {
 	}
 	return result, nil
 }
+
+type txUnconfirmedResult struct {
+	responseCode
+	List []string `json:"data"`
+}
+
+//StringToUnconfirmedHex json convert to  model
+func StringToUnconfirmedHex(str string) ([]string, error) {
+
+	var data txUnconfirmedResult
+	json.Unmarshal([]byte(str), &data)
+
+	if data.ErrNo != 0 {
+		return nil, errors.New(data.ErrMsg)
+	}
+	return data.List, nil
+
+}
+
+//TxUncomfirmedSummary size and count
+type TxUncomfirmedSummary struct {
+	Size  int
+	Count int
+}
+
+type resultTxUncomfirmedSummary struct {
+	responseCode
+	Summary TxUncomfirmedSummary `json:"data"`
+}
+
+//StringToUncomfirmedSummary json convert to  model
+func StringToUncomfirmedSummary(str string) (*TxUncomfirmedSummary, error) {
+
+	var data resultTxUncomfirmedSummary
+	json.Unmarshal([]byte(str), &data)
+
+	if data.ErrNo != 0 {
+		return nil, errors.New(data.ErrMsg)
+	}
+	return &data.Summary, nil
+
+}
