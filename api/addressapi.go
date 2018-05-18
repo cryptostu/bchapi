@@ -12,7 +12,7 @@ import (
 func GetAddress(addr string) (*model.Address, error) {
 
 	url := fmt.Sprintf(bchapi.AddressUrl, addr)
-	result, err := bchapi.HttpGet(url)
+	result, err := bchapi.HttpGet(url, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func GetAddress(addr string) (*model.Address, error) {
 func GetMultiAddress(args ...string) ([]model.Address, error) {
 	addrs := strings.Join(args, ",")
 	url := fmt.Sprintf(bchapi.AddressUrl, addrs)
-	result, err := bchapi.HttpGet(url)
+	result, err := bchapi.HttpGet(url, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +34,22 @@ func GetMultiAddress(args ...string) ([]model.Address, error) {
 
 //GetAddressTx get Address tx list
 func GetAddressTx(addr string, page int, pagesize int) (*model.AddressTx, error) {
-	url := fmt.Sprintf(bchapi.AddressTxUrl, addr)
-	result, err := bchapi.HttpGet(url)
+	url := fmt.Sprintf(bchapi.AddressTxUrl, addr, page, pagesize)
+	result, err := bchapi.HttpGet(url, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
 	if err != nil {
 		return nil, err
 	}
 	addressTx, err := model.StringToAddressTx(result)
 	return addressTx, err
+}
+
+//GetAddressUnspent Returns information about unspent txs
+func GetAddressUnspent(addr string, page int, pagesize int) (*model.AddressUnspent, error) {
+	url := fmt.Sprintf(bchapi.AddressUnspentUrl, addr, page, pagesize)
+	result, err := bchapi.HttpGet(url, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
+	if err != nil {
+		return nil, err
+	}
+	addressUnspent, err := model.StringToAddressUnspent(result)
+	return addressUnspent, err
 }

@@ -2,16 +2,14 @@ package api
 
 import (
 	"fmt"
+
 	"github.com/cryptostu/bchapi"
 	"github.com/cryptostu/bchapi/model"
-
 )
-
-
 
 func GetBlockTxs(height int) ([]*model.Tx, error) {
 	url := fmt.Sprintf(bchapi.BlockTxsUrl, height)
-	result, err := bchapi.HttpGet(url)
+	result, err := bchapi.HttpGet(url, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -22,7 +20,7 @@ func GetBlockTxs(height int) ([]*model.Tx, error) {
 
 func GetBlock(height int) (*model.Block, error) {
 	url := fmt.Sprintf(bchapi.BlockUrl, height)
-	result, err := bchapi.HttpGet(url)
+	result, err := bchapi.HttpGet(url, bchapi.ConnTimeoutMS, bchapi.ServeTimeoutMS)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
