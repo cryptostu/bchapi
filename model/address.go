@@ -17,17 +17,36 @@ type Address struct {
 	UnconfirmedSent     int `json:"unconfirmed_sent"`
 	UnspentTxCount      int `json:"unspent_tx_count"`
 }
+type responseCode struct {
+	ErrNo  int    `json:"err_no"`
+	ErrMsg string `json:"err_msg"`
+}
+
+type paginator struct {
+	TotalCount int `json:"total_count"`
+	Page       int
+	Pagesize   int
+}
 
 type multiAddressResult struct {
 	Address []Address `json:"data"`
-	ErrNo   int       `json:"err_no"`
-	ErrMsg  string    `json:"err_msg"`
+	responseCode
 }
 
 type addressResult struct {
 	Address Address `json:"data"`
-	ErrNo   int     `json:"err_no"`
-	ErrMsg  string  `json:"err_msg"`
+	responseCode
+}
+
+//AddressTx address
+type AddressTx struct {
+	paginator
+	Txs []Tx `json:"list"`
+}
+
+type addressTxResult struct {
+	responseCode
+	AddressTx AddressTx `json:"data"`
 }
 
 //StringToAddress json convert to model
@@ -53,5 +72,18 @@ func StringToMultiAddress(str string) (*[]Address, error) {
 		return nil, errors.New(data.ErrMsg)
 	}
 	return &data.Address, nil
+
+}
+
+//StringToAddressTx json convert to model
+func StringToAddressTx(str string) (*AddressTx, error) {
+
+	var data addressTxResult
+	json.Unmarshal([]byte(str), &data)
+
+	if data.ErrNo != 0 {
+		return nil, errors.New(data.ErrMsg)
+	}
+	return &data.AddressTx, nil
 
 }
