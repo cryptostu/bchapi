@@ -72,6 +72,7 @@ func StringToTx(str string) (*Tx, error) {
 	if data.ErrNo != 0 {
 		return nil, errors.New(data.ErrMsg)
 	}
+	data.Tx.PreFee = float64(data.Tx.Fee) / float64(data.Tx.Size)
 	return &data.Tx, nil
 
 }

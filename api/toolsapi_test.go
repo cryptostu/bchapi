@@ -11,7 +11,10 @@ func TestTxDecode(t *testing.T) {
 }
 
 func TestTxPublish(t *testing.T) {
-
+	rawhex := "020000000121b00cc355677dc6d7114f62bfaccd5d76ec50fae5d62c86d50096c4817a4b93820000006b483045022100adaab40f2c9fe7250e9f6b3930e764091fcaf1a0efa86e61236cd0c427a4eb9f02200ef7d395a90d55f804f2fbdd6eabe4b345e43202f7ce107ccfde15aad6b3a46141210384dd3ad997f2e10980e755236b474f986c519599946027876cdeb4eb5a30a09fffffffff0110270000000000001976a9140c4660bc6acf0daba88b95e43411d17162b2466588ac00000000"
+	if _, err := TxPublish(rawhex); err != nil {
+		t.Errorf("TxPublish  api failed,err:%s", err.Error())
+	}
 }
 
 func TestVerifyMessage(t *testing.T) {

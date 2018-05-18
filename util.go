@@ -15,19 +15,40 @@ const (
 )
 
 //HttpGet get method
-func HttpGet(url string) (str string, err error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return
+func HttpGet(url string, connTimeoutMs int, serveTimeoutMs int) (str string, err error) {
+	client := &http.Client{
+		Transport: &http.Transport{
+			Dial: func(netw, addr string) (net.Conn, error) {
+				c, err := net.DialTimeout(netw, addr, time.Duration(connTimeoutMs)*time.Millisecond)
+				if err != nil {
+					return nil, err
+				}
+				c.SetDeadline(time.Now().Add(time.Duration(serveTimeoutMs) * time.Millisecond))
+				return c, nil
+			},
+		},
 	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	str = string(body)
-	return
 
+	reqest, _ := http.NewRequest("GET", url, nil)
+	response, err := client.Do(reqest)
+	if err != nil {
+		err = fmt.Errorf("http failed, GET url:%s, reason:%s", url, err.Error())
+		return
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != 200 {
+		err = fmt.Errorf("http status code error, GET url:%s, code:%d", url, response.StatusCode)
+		return
+	}
+
+	resBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		err = fmt.Errorf("cannot read http response, GET url:%s, reason:%s", url, err.Error())
+		return
+	}
+	str = string(resBody)
+	return
 }
 
 //HttpPost post method
