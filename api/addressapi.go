@@ -43,7 +43,7 @@ func GetAddressTx(addr string, page int, pagesize int) (*model.AddressTx, error)
 	return addressTx, err
 }
 
-//GetAddressUnspent get address unspent struct
+//GetAddressUnspent Returns information about unspent txs
 func GetAddressUnspent(addr string, page int, pagesize int) (*model.AddressUnspent, error) {
 	url := fmt.Sprintf(bchapi.AddressUnspentUrl, addr, page, pagesize)
 	result, err := bchapi.HttpGet(url)
